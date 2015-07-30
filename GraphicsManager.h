@@ -36,6 +36,7 @@ public:
 	unsigned int createShaderResourceFromFile(char * resourceName, LPWSTR file, char * fileName, State * boundState);
 	void clearStateBoundResources(State * state);
 	void commitNewResources();
+	XMFLOAT2 * getScreenResolution();
 protected:
 	void setConstantBufferData(void * data, unsigned int size);
 	void setInstanceBufferData(void * data, unsigned int size, unsigned int stride);

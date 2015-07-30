@@ -65,7 +65,7 @@ void Game::render()
 
 void Game::destroy()
 {
-	
+	delete stateMachine;
 }
 
 GraphicsManager * Game::getGraphics()

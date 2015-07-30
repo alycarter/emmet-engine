@@ -2,9 +2,9 @@
 
 Transform::Transform()
 {
-	position = XMVectorSet(0, 0, 0, 1);
-	rotation = XMQuaternionIdentity();
-	scale = XMVectorSet(1, 1, 1, 1);
+	position = XMFLOAT3(0, 0, 0);
+	rotation = XMFLOAT4(0, 0, 0, 1);
+	scale = XMFLOAT3(1, 1, 1);
 }
 
 
@@ -13,43 +13,67 @@ Transform::~Transform()
 
 }
 
-XMVECTOR * Transform::getPosition()
+XMVECTOR Transform::getPosition()
 {
-	return &position;
+	return XMLoadFloat3(&position);
 }
 
-XMVECTOR * Transform::getRotation()
+void Transform::setPosition(XMVECTOR * positionIn)
 {
-	return &rotation;
+	XMStoreFloat3(&position, *positionIn);
 }
 
-XMVECTOR * Transform::getScale()
+XMVECTOR Transform::getRotation()
 {
-	return &scale;
+	return XMLoadFloat4(&rotation);
+}
+
+void Transform::setRotation(XMVECTOR * rotationIn)
+{
+	XMStoreFloat4(&rotation, *rotationIn);
+}
+
+XMVECTOR Transform::getScale()
+{
+	return XMLoadFloat3(&scale);
+}
+
+void Transform::setScale(XMVECTOR * scaleIn)
+{
+	XMStoreFloat3(&scale, *scaleIn);
+}
+
+XMVECTOR Transform::getForward()
+{
+	return XMVector3Transform(XMVectorSet(0, 0, 1, 0), getRotationMatrix());
+}
+
+XMVECTOR Transform::getUp()
+{
+	return XMVector3Transform(XMVectorSet(0, 1, 0, 0), getRotationMatrix());
+}
+
+XMVECTOR Transform::getLeft()
+{
+	return XMVector3Transform(XMVectorSet(1, 0, 0, 0), getRotationMatrix());
 }
 
 void Transform::getRotationMatrix(XMMATRIX * matrix)
 {
-	*matrix = XMMatrixRotationQuaternion(rotation);
+	*matrix = XMMatrixRotationQuaternion(getRotation());
 }
 
-void Transform::getForward(XMVECTOR * forward)
+XMMATRIX Transform::getRotationMatrix()
 {
-	XMMATRIX rot;
-	getRotationMatrix(&rot);
-	*forward = XMVector3Transform(XMVectorSet(0, 0, 1, 0), rot);
+	return XMMatrixRotationQuaternion(getRotation());
 }
 
-void Transform::getUp(XMVECTOR * up)
+void Transform::getTransformationMatrix(XMMATRIX * matrix)
 {
-	XMMATRIX rot;
-	getRotationMatrix(&rot);
-	*up = XMVector3Transform(XMVectorSet(0, 1, 0, 0), rot);
+	*matrix = XMMatrixAffineTransformation(getScale(), XMVectorSet(0, 0, 0, 1), getRotation(), getPosition());
 }
 
-void Transform::getLeft(XMVECTOR * left)
+XMMATRIX Transform::getTransformationMatrix()
 {
-	XMMATRIX rot;
-	getRotationMatrix(&rot);
-	*left = XMVector3Transform(XMVectorSet(1, 0, 0, 0), rot);
+	return XMMatrixAffineTransformation(getScale(), XMVectorSet(0, 0, 0, 1), getRotation(), getPosition());
 }

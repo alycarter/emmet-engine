@@ -84,7 +84,8 @@ void GraphicsManager::createDirectXContext(Window * window)
     scd.SampleDesc.Count = 4;                               // how many multisamples
     scd.Windowed = TRUE;                                    // windowed/full-screen mode
     // create a device, device context and swap chain using the information in the scd struct
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL, NULL, NULL, D3D11_SDK_VERSION, &scd, &swapchain, &dev, NULL, &devcon);
+	
+	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D10_CREATE_DEVICE_DEBUG, NULL, NULL, D3D11_SDK_VERSION, &scd, &swapchain, &dev, NULL, &devcon);
 	swapchain->ResizeBuffers(1, (UINT)screenResolution.x, (UINT)screenResolution.y, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 	// select which primtive type we are using
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -94,6 +95,11 @@ void GraphicsManager::swapBuffers()
 {
 	// switch the back buffer and the front buffer
 	swapchain->Present(0, 0);
+}
+
+XMFLOAT2 * GraphicsManager::getScreenResolution()
+{
+	return &screenResolution;
 }
 
 void GraphicsManager::createRenderTarget()

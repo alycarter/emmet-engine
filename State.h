@@ -52,16 +52,16 @@ template < class T > void State::getComponentsOfType(vector<T *> * foundComponen
 {
 	for (unsigned int i = 0; i < entities.size(); i++)
 	{
-		entities.at(i)->getComponentsOfType(foundComponents, type);
+		entities.at(i)->getComponentsOfType<T>(foundComponents);
 	}
 }
 template < class T > T * State::getComponentOfType()
 {
 	for (unsigned int i = 0; i < entities.size(); i++)
 	{
-		if (entities.at(i)->hasComponentOfType(type))
+		if (entities.at(i)->hasComponentOfType<T>())
 		{
-			return entities.at(i)->getComponentOfType(type);
+			return entities.at(i)->getComponentOfType<T>();
 		}
 	}
 	return NULL;
